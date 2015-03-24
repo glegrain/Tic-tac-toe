@@ -7,7 +7,6 @@
 /////////////////////////////////////////////////////
 
 // states
-
 typedef enum logic [2:0] {START, PLAYER1, PLAYER2, END} statetype;
 
 
@@ -28,6 +27,12 @@ module statelogic(input logic ph1, ph2, reset,
                   output statetype state);
 
   statetype nextstate;
+  logic [1:0] ns, state_logic;
+
+  // resetable state register with initial value of START
+  mux2 #(2) resetmux(nextstate, START, reset, ns);
+  flop #(2) stateregister(ph1, ph2, ns, state_logic);
+  assign state = statetype'(state_logic);
 
   // next state logic
   always_comb
