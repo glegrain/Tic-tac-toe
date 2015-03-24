@@ -36,8 +36,6 @@ module memarray_tb();
   // check results on falling edge of clk
   always @(negedge ph2)
     if(~reset) begin // skip during reset
-      // $display("addr: %b, cellState: %b", addr, cellState);
-      // $display("testvector: %b", testvectors[vectornum]);
       if (gBoard !== gBoardExpected) begin // check result
         $display("Error: inputs=%b", {addr,cellState});
         $display("outputs=%b (%b expected)", gBoard, gBoardExpected);
