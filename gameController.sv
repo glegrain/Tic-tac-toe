@@ -1,7 +1,7 @@
 // Game Controller FSM block for tic-tac-toe project
 // Written by Katherine Yang and Guillaume Legrain
 // Written in: March 23, 2015
-// Last edited: March 23, 2015
+// Last edited: March 24, 2015
 // player1:11, player2:10, tie:01, noWin:00
 // cellState: empty:00, player1:11, player2:10
 /////////////////////////////////////////////////////
