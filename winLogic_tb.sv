@@ -37,7 +37,7 @@ module winLogic_tb();
     if(~reset) begin // skip during reset
       //$display("Testing: gameIsDoneExp=%b , winnerExp=%b...", gameIsDoneExp, winnerExp);
       if ((gameIsDone !== gameIsDoneExp)|(winner !== winnerExp)) begin // check result
-        $display("Error: input=%b", {gBoard});
+        $display("Error: on testvector number:%d, input=%b", vectornum, gBoard);
         $display("output done: %b, (%b expected)", gameIsDone, gameIsDoneExp);
         $display("output winner: %b, (%b expected)", winner, winnerExp);
         errors = errors + 1;
