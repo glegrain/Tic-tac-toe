@@ -22,13 +22,17 @@ module gameController(input  logic        ph1, ph2, reset,
   statetype state;
 
   // control FSM
-  statelogic  statelog(ph1, ph2, reset, state);
-  outputlogic outputlog(state);
+  statelogic  statelog(.ph1, .ph2, .reset,
+                       .isPlayer1Start, .gameIsDone, .playerWrite, .state);
+  outputlogic outputlog(.state, .playerWrite, .playerInput, .addr, .cellState);
 
 endmodule
 
 
-module statelogic(input logic ph1, ph2, reset,
+module statelogic(input  logic     ph1, ph2, reset,
+                  input  logic     isPlayer1Start,
+                  input  logic     gameIsDone,
+                  input  logic     playerWrite,
                   output statetype state);
 
   statetype nextstate;
@@ -45,10 +49,10 @@ module statelogic(input logic ph1, ph2, reset,
       case (state)
         START:   nextstate = (isPlayer1Start) ? PLAYER1 : PLAYER2;
         PLAYER1: if (gameIsDone) nextstate = END;
-                 else if (player1Write) nextstate = PLAYER2;
+                 else if (playerWrite) nextstate = PLAYER2;
                  else nextstate = PLAYER1;
         PLAYER2: if (gameIsDone) nextstate = END;
-                 else if (player1Write) nextstate = PLAYER1;
+                 else if (playerWrite) nextstate = PLAYER1;
                  else nextstate = PLAYER1;
         END:     nextstate = END;
         default: nextstate = START;
@@ -56,7 +60,11 @@ module statelogic(input logic ph1, ph2, reset,
     end
 endmodule
 
-module outputlogic(input statetype state);
+module outputlogic(input  statetype   state,
+                   input  logic       playerWrite,
+                   input  logic [3:0] playerInput,
+                   output logic [3:0] addr,
+                   output logic [1:0] cellState);
 
   always_comb
     begin
