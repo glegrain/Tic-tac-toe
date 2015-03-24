@@ -21,7 +21,7 @@ module winLogic_tb();
     begin
       //$dumpfile("winLogic_tb.vcd"); // where to dump the results
       //$dumpvars(1, clk, reset, gBoard, gameIsDone, winner);
-      $readmemb("winLogic_tb.tv", testvectors);
+      $readmemb("winLogic.tv", testvectors);
       vectornum=0; errors=0;
       reset=1; #27; reset=0;
     end
