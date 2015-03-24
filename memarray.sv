@@ -14,27 +14,27 @@ module memArray(input logic ph1, ph2, reset,
     
     // Write decoder
     add2mem  decoder(addr[3:0], writePos[8:0]);
-    
-    assign clkEn = ph2 & writePos & reset;
 
     // array of Flip-flops
-    flopenr #(2) cell0(ph1, ph2, reset, writePos[0], cellState[1:0],
+    // NOTE: cellState bit order is flip to have the LSB of the gBoard be the MSB
+    // of the cellState
+    flopenr #(2) cell0(ph1, ph2, reset, writePos[0], {cellState[0],cellState[1]},
                        prevGB[1:0]);
-    flopenr #(2) cell1(ph1, ph2, reset, writePos[1], cellState[1:0],
+    flopenr #(2) cell1(ph1, ph2, reset, writePos[1], {cellState[0],cellState[1]},
                        prevGB[3:2]);
-    flopenr #(2) cell2(ph1, ph2, reset, writePos[2], cellState[1:0],
+    flopenr #(2) cell2(ph1, ph2, reset, writePos[2], {cellState[0],cellState[1]},
                        prevGB[5:4]);
-    flopenr #(2) cell3(ph1, ph2, reset, writePos[3], cellState[1:0],
+    flopenr #(2) cell3(ph1, ph2, reset, writePos[3], {cellState[0],cellState[1]},
                        prevGB[7:6]);
-    flopenr #(2) cell4(ph1, ph2, reset, writePos[4], cellState[1:0],
+    flopenr #(2) cell4(ph1, ph2, reset, writePos[4], {cellState[0],cellState[1]},
                        prevGB[9:8]);
-    flopenr #(2) cell5(ph1, ph2, reset, writePos[5], cellState[1:0],
+    flopenr #(2) cell5(ph1, ph2, reset, writePos[5], {cellState[0],cellState[1]},
                        prevGB[11:10]);
-    flopenr #(2) cell6(ph1, ph2, reset, writePos[6], cellState[1:0],
+    flopenr #(2) cell6(ph1, ph2, reset, writePos[6], {cellState[0],cellState[1]},
                        prevGB[13:12]);
-    flopenr #(2) cell7(ph1, ph2, reset, writePos[7], cellState[1:0],
+    flopenr #(2) cell7(ph1, ph2, reset, writePos[7], {cellState[0],cellState[1]},
                        prevGB[15:14]);
-    flopenr #(2) cell8(ph1, ph2, reset, writePos[8], cellState[1:0],
+    flopenr #(2) cell8(ph1, ph2, reset, writePos[8], {cellState[0],cellState[1]},
                        prevGB[17:16]);
 
     assign gameBoard = prevGB;
