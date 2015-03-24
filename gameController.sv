@@ -11,9 +11,14 @@ typedef enum logic [2:0] {START, PLAYER1, PLAYER2, END} statetype;
 
 
 module gameController(input  logic        ph1, ph2, reset,
+                      input  logic        isPlayer1Start,
+                      input  logic        playerWrite,
+                      input  logic  [3:0] playerInput,  // cell address to play. the cell state is based on the FSM state
                       input  logic [17:0] gBoard,
                       input  logic        gameIsDone,
-                      input  logic  [1:0] winner);
+                      input  logic  [1:0] winner,
+                      output logic  [3:0] addr,
+                      output logic  [1:0] cellState);
   statetype state;
 
   // control FSM
@@ -38,8 +43,13 @@ module statelogic(input logic ph1, ph2, reset,
   always_comb
     begin
       case (state)
-        START:   nextstate = PLAYER1;
-        PLAYER1: nextstate = PLAYER2;
+        START:   nextstate = (isPlayer1Start) ? PLAYER1 : PLAYER2;
+        PLAYER1: if (gameIsDone) nextstate = END;
+                 else if (player1Write) nextstate = PLAYER2;
+                 else nextstate = PLAYER1;
+        PLAYER2: if (gameIsDone) nextstate = END;
+                 else if (player1Write) nextstate = PLAYER1;
+                 else nextstate = PLAYER1;
         END:     nextstate = END;
         default: nextstate = START;
       endcase
@@ -50,6 +60,12 @@ module outputlogic(input statetype state);
 
   always_comb
     begin
-      /* TODO */
+      addr = (playerWrite) playerInput : prevAddr;
+      if (state == PLAYER1)
+        cellState = 2'b11;
+      else if (state == PLAYER2)
+        cellState = 2'b10;
+      else
+        cellState = 2'b00;
     end
 endmodule
