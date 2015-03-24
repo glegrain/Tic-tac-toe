@@ -68,7 +68,12 @@ module outputlogic(input  statetype   state,
 
   always_comb
     begin
-      addr = (playerWrite) playerInput : prevAddr;
+      // NOTE: Assuming playerWrite is enable bit active on one clock cycle.
+      //       A sperate module can be used to detect the playerWrite rising edge.
+
+      // always send cellState to memory but will write only
+      // on valid addr (addr of 9'b0 won't write anything)
+      addr = (playerWrite) playerInput : 9'b000000000;
       if (state == PLAYER1)
         cellState = 2'b11;
       else if (state == PLAYER2)
