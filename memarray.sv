@@ -46,15 +46,18 @@ module add2mem(input logic [3:0]addr,
                output logic[8:0]writePos);
    always_comb
         begin
-            writePos[0] = ~addr[2] & ~addr[1] & ~addr[0]; // addr = 4'b0000 //upperleft
-            writePos[1] = ~addr[2] & ~addr[1] &  addr[0]; // addr = 4'b0001
-            writePos[2] = ~addr[2] &  addr[1] & ~addr[0]; // addr = 4'b0010
-            writePos[3] = ~addr[2] &  addr[1] &  addr[0]; // addr = 4'b0011
-            writePos[4] =  addr[2] & ~addr[1] & ~addr[0]; // addr = 4'b0100
-            writePos[5] =  addr[2] & ~addr[1] &  addr[0]; // addr = 4'b0101
-            writePos[6] =  addr[2] &  addr[1] & ~addr[0]; // addr = 4'b0110
-            writePos[7] =  addr[2] &  addr[1] &  addr[0]; // addr = 4'b0111
-            writePos[8] =  addr[3];                       // addr = 4'b1000 //lower right
+          case (addr)
+            4'b0000: writePos = 9'b000000001; // upperleft cell
+            4'b0001: writePos = 9'b000000010;
+            4'b0010: writePos = 9'b000000100;
+            4'b0011: writePos = 9'b000001000;
+            4'b0100: writePos = 9'b000010000;
+            4'b0101: writePos = 9'b000100000;
+            4'b0110: writePos = 9'b001000000;
+            4'b0111: writePos = 9'b010000000;
+            4'b1000: writePos = 9'b100000000;  // lowerleft cell
+            default: writePos = 9'b000000000;  // else, don't write
+          endcase
         end
 endmodule
 
