@@ -1,6 +1,7 @@
 // Memory array block for tic-tac-toe project
 // Written by Katherine Yang and Guillaume Legrain
-// March 23, 2015 
+// Written in: March 23, 2015
+// Last edited: March 24, 2015
 // player1:11, player2:10, tie:01, noWin:00
 // cellState: empty:00, player1:11, player2:10
 /////////////////////////////////////////////////////
