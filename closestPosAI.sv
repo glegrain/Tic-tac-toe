@@ -86,7 +86,7 @@ endmodule
 
 
 module statelogic(input  logic     ph1, ph2, reset,
-                  input  logic     isTurn, rowIsFull
+                  input  logic     isTurn, isFull,
                   output statetype[2:0] state);
 
   statetype [2:0]nextstate;
@@ -124,4 +124,5 @@ module outputlogic(input  statetype [2:0] state,
         4'b0011: writeToBoard <= 1'b1;
         default: writeToBoard <= 1'b0;
       endcase
+    end
 endmodule

@@ -7,6 +7,7 @@
 /////////////////////////////////////////////////////
 
 // Cell states constants
+// 0 is the human player, X is the AI
 typedef enum logic [1:0] {EMPTY = 2'b00, O = 2'b11, X = 2'b10} cellStateType;
 
 // states
@@ -43,8 +44,8 @@ module statelogic(input  logic     ph1, ph2, reset,
   logic [2:0] ns, state_logic;
 
   // resetable state register with initial value of START
-  mux2 #(3) resetmux(nextstate, START, reset, ns);
-  flop #(3) stateregister(ph1, ph2, ns, state_logic);
+  mux2 #(2) resetmux(nextstate, START, reset, ns);
+  flop #(2) stateregister(ph1, ph2, ns, state_logic);
   assign state = statetype'(state_logic);
 
   // next state logic
