@@ -68,7 +68,7 @@ module gameController_tb();
       # 10
       // SHOULD change state to PLAYER2
       playerWrite = 0;
-      playerWrite = 4'b0100;    // Testbench AI chooses center cell
+      playerInput = 4'b0100;    // Testbench AI chooses center cell
       # 40
       playerWrite = 1;
       # 10
