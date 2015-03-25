@@ -8,14 +8,21 @@
 module gameController_tb();
   logic         ph1, ph2;
   logic         reset;
+  logic         clk; // for the testvectors
   logic         isPlayer1Start;
   logic         playerWrite;
   logic  [3:0]  playerInput;  // cell address to play. the cell state is based on the FSM state
   logic [17:0]  gBoard;
-  logic         gameIsDone;
-  logic  [1:0]  winner;
   logic  [3:0]  addr;
-  logic  [1:0]  cellState;  
+  logic  [1:0]  cellState; 
+  // Outputs and expected values
+  logic         gameIsDone, gameIsDoneExp;
+  logic  [1:0]  winner, winnerExp;
+  logic  [2:0]  gameState, gameStateExp;
+  // add testvector stuff
+  logic [31:0] vectornum, errors; 
+  logic [12:0] testvectors[1000:0];
+
 
 
 
@@ -28,10 +35,12 @@ module gameController_tb();
                      .gameIsDone,
                      .winner,
                      .addr,
+                     .gameState,
                      .cellState);
-
+  // updates to memory
   memArray dut2(ph1, ph2, reset, addr, cellState, gBoard);
-  //winLogic winLogic1(.gBoard, .gameIsDone, .winner);
+  // checks for win logic
+  winLogic dut3(gBoard, gameIsDone, winner); //ADDED HERE
 
   // generate clock to sequence tests
   always
@@ -41,12 +50,17 @@ module gameController_tb();
      ph1 = 0; # 1; 
      ph2 = 1; # 4;
     end
-
+  // initialize clk for testvector checks
+  always
+    begin
+     clk = 1; #5; 
+     clk = 0; #5;
+    end
   // tell the simulator to store the waveform into a file for inspection
   // and start dumping all signal to the .vcd file
   initial
     begin
-      $dumpfile("gameController.vcd");
+      $dumpfile("tictactoe.vcd");
       $dumpvars;
     end
 
@@ -97,8 +111,44 @@ module gameController_tb();
   initial
     begin
       # 500
-      $display("Test completed");
+      $display("Hand test completed");
       //$finish;
     end
+    // at start of test, load test vectors
+  // and pulse reset
+  initial
+    begin
+      //$dumpfile("winLogic_tb.vcd"); // where to dump the results
+      //$dumpvars(1, clk, reset, gBoard, gameIsDone, winner);
+      $readmemb("tictactoe.tv", testvectors);
+      vectornum=0; errors=0;
+      reset=1; #27; reset=0;
+    end
 
+  // apply test vectors on rising edge of clk
+  always @(posedge clk)
+    begin
+      #1; {isPlayer1Start, playerWrite, playerInput, gameIsDoneExp, winnerExp, gameStateExp} = testvectors[vectornum];
+    end
+
+  // check results on falling edge of clk
+  always @(negedge clk)
+    if(~reset) begin // skip during reset
+      //$display("Testing: gameIsDoneExp=%b , winnerExp=%b...", gameIsDoneExp, winnerExp);
+      if ((gameIsDone !== gameIsDoneExp)|(winner !== winnerExp)|(gameState !== gameStateExp)) begin // check result
+        $display("Error: on testvector number:%d, input=%b", vectornum, gBoard);
+        $display("output done: %b, (%b expected)", gameIsDone, gameIsDoneExp);
+        $display("output winner: %b, (%b expected)", winner, winnerExp);
+        $display("output gameState: %b, (%b expected)", gameState, gameStateExp);
+        errors = errors + 1;
+     
+    end
+    vectornum = vectornum + 1;
+    //$display("testing we want %b, we see %b..", 21'bx, testvectors[vectornum]);
+    if(testvectors[vectornum] === 12'bx) begin
+      $display("%d tests completed with %d errors", vectornum, errors);
+      //$dumpflush;
+      $finish;
+    end
+  end
 endmodule
