@@ -1,4 +1,35 @@
+# sim-nc(g) generated files
 INCA_libs/
 *.log
 ncverilog.key
 waves.shm
+
+# ModelSim generated files
+work/
+
+# ModelSim project files
+*.mpf
+
+# ignore ModelSim generated files and directories (temp files and so on)
+[_@]*
+
+# ignore compilation output of ModelSim
+*.mti
+*.dat
+*.dbs
+*.psm
+*.bak
+*.cmp
+*.jpg
+*.html
+*.bsf
+
+# ignore simulation output of ModelSim
+wlf*
+*.wlf
+*.vstf
+*.ucdb
+cov*/
+transcript*
+sc_dpiheader.h
+vsim.dbg
