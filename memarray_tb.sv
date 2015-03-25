@@ -40,11 +40,11 @@ module memarray_tb();
         $display("Error: inputs=%b", {addr,cellState});
         $display("outputs=%b (%b expected)", gBoard, gBoardExpected);
         errors = errors + 1;
+      end
+      vectornum = vectornum + 1;
+      if(testvectors[vectornum] === 24'bx) begin
+        $display("%d tests completed with %d errors", vectornum, errors);
+        $finish;
+      end
     end
-    vectornum = vectornum + 1;
-    if(testvectors[vectornum] === 24'bx) begin
-      $display("%d tests completed with %d errors", vectornum, errors);
-      $finish;
-    end
-  end
 endmodule
