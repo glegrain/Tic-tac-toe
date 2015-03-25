@@ -1,16 +1,16 @@
 // Memory array block for tic-tac-toe project
 // Written by Katherine Yang and Guillaume Legrain
 // Written in: March 23, 2015
-// Last edited: March 24, 2015
+// Last edited: March 25, 2015
 // player1:11, player2:10, tie:01, noWin:00
 // cellState: empty:00, player1:11, player2:10
 /////////////////////////////////////////////////////
-module memArray(input logic ph1, ph2, reset,
-                input logic [3:0]addr,
-                input logic [1:0]cellState,
-                output logic [17:0]gameBoard);
+module memArray(input  logic        ph1, ph2, reset,
+                input  logic  [3:0] addr,
+                input  logic  [1:0] cellState,
+                output logic [17:0] gameBoard);
    
-    logic [8:0]writePos, clkEn;
+    logic [8:0]  writePos;
     logic [17:0] prevGB;
     
     // Write decoder
@@ -43,8 +43,8 @@ module memArray(input logic ph1, ph2, reset,
 endmodule
 
 // Write decoder logic
-module add2mem(input logic [3:0]addr,
-               output logic[8:0]writePos);
+module add2mem(input  logic [3:0] addr,
+               output logic [8:0] writePos);
    always_comb
         begin
           case (addr)
