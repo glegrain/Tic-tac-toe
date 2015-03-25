@@ -6,6 +6,9 @@
 // cellState: empty:00, player1:11, player2:10
 /////////////////////////////////////////////////////
 
+// Cell states constants
+typedef enum logic [1:0] {EMPTY = 2'b00, O = 2'b11, X = 2'b10} cellStateType;
+
 // states
 typedef enum logic [2:0] {START, PLAYER1, PLAYER2, END} statetype;
 
@@ -18,7 +21,7 @@ module gameController(input  logic        ph1, ph2, reset,
                       input  logic        gameIsDone,
                       input  logic  [1:0] winner,
                       output logic  [3:0] addr,
-                      output logic  [1:0] cellState);
+                      output cellStateType cellState);
   statetype state;
 
   // control FSM
@@ -64,7 +67,7 @@ module outputlogic(input  statetype   state,
                    input  logic       playerWrite,
                    input  logic [3:0] playerInput,
                    output logic [3:0] addr,
-                   output logic [1:0] cellState);
+                   output cellStateType cellState);
 
   always_comb
     begin
@@ -75,10 +78,10 @@ module outputlogic(input  statetype   state,
       // on valid addr (addr of 4'b0 won't write anything)
       addr = (playerWrite) ? playerInput : 4'b0000;
       if (state == PLAYER1)
-        cellState = 2'b11;
+        cellState = O;
       else if (state == PLAYER2)
-        cellState = 2'b10;
+        cellState = X;
       else
-        cellState = 2'b00;
+        cellState = EMPTY;
     end
 endmodule
