@@ -22,9 +22,10 @@ module gameController(input  logic        ph1, ph2, reset,
                       input  logic        gameIsDone,
                       input  logic  [1:0] winner,
                       output logic  [3:0] addr,
+                      output logic  [2:0] outputState,
                       output cellStateType cellState);
   statetype state;
-
+  assign outputState = state;
   // control FSM
   statelogic  statelog(.ph1, .ph2, .reset,
                        .isPlayer1Start, .gameIsDone, .playerWrite, .gBoard, .state);
