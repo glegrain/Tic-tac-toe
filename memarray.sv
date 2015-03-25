@@ -8,7 +8,7 @@
 module memArray(input  logic        ph1, ph2, reset,
                 input  logic  [3:0] addr,
                 input  logic  [1:0] cellState,
-                output logic [17:0] gameBoard);
+                output logic [17:0] gBoard);
    
     logic [8:0]  writePos;
     logic [17:0] prevGB;
@@ -38,7 +38,7 @@ module memArray(input  logic        ph1, ph2, reset,
     flopenr #(2) cell8(ph1, ph2, reset, writePos[8], {cellState[0],cellState[1]},
                        prevGB[17:16]);
 
-    assign gameBoard = prevGB;
+    assign gBoard = prevGB;
     
 endmodule
 
