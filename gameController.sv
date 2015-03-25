@@ -72,8 +72,8 @@ module outputlogic(input  statetype   state,
       //       A sperate module can be used to detect the playerWrite rising edge.
 
       // always send cellState to memory but will write only
-      // on valid addr (addr of 9'b0 won't write anything)
-      addr = (playerWrite) playerInput : 9'b000000000;
+      // on valid addr (addr of 4'b0 won't write anything)
+      addr = (playerWrite) ? playerInput : 4'b0000;
       if (state == PLAYER1)
         cellState = 2'b11;
       else if (state == PLAYER2)
