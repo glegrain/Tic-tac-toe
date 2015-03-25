@@ -41,11 +41,11 @@ module statelogic(input  logic     ph1, ph2, reset,
                   output statetype state);
 
   statetype nextstate;
-  logic [1:0] ns, state_logic;
+  logic [2:0] ns, state_logic;
 
   // resetable state register with initial value of START
-  mux2 #(2) resetmux(nextstate, START, reset, ns);
-  flop #(2) stateregister(ph1, ph2, ns, state_logic);
+  mux2 #(3) resetmux(nextstate, START, reset, ns);
+  flop #(3) stateregister(ph1, ph2, ns, state_logic);
   assign state = statetype'(state_logic);
 
   // next state logic
