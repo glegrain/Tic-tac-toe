@@ -26,7 +26,7 @@ module gameController(input  logic        ph1, ph2, reset,
 
   // control FSM
   statelogic  statelog(.ph1, .ph2, .reset,
-                       .isPlayer1Start, .gameIsDone, .playerWrite, .state);
+                       .isPlayer1Start, .gameIsDone, .playerWrite, .gBoard, .state);
   outputlogic outputlog(.state, .playerWrite, .playerInput, .addr, .cellState);
 
 endmodule
@@ -36,6 +36,7 @@ module statelogic(input  logic     ph1, ph2, reset,
                   input  logic     isPlayer1Start,
                   input  logic     gameIsDone,
                   input  logic     playerWrite,
+                  input  logic [17:0] gBoard,    
                   output statetype state);
 
   statetype nextstate;
@@ -50,7 +51,10 @@ module statelogic(input  logic     ph1, ph2, reset,
   always_comb
     begin
       case (state)
-        START:   nextstate = (isPlayer1Start) ? PLAYER1 : PLAYER2;
+        START:   if (gBoard == 18'b0) // Wait for gBoard to be initialized
+                  nextstate = (isPlayer1Start) ? PLAYER1 : PLAYER2;
+                 else
+                  nextstate = START;
         PLAYER1: if (gameIsDone) nextstate = END;
                  else if (playerWrite) nextstate = PLAYER2;
                  else nextstate = PLAYER1;

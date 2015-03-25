@@ -55,8 +55,25 @@ module gameController_tb();
       isPlayer1Start = 1;
       gameIsDone = 0;
       playerWrite = 0;
-      gBoard = {18{1'b0}}; // FIXME: hack until reset on memArray is working
+
       reset=1; #7; reset=0;
+
+      // FIXME: hack until reset on memArray is working
+      cellState = 2'b00;
+      addr = 4'b0000; #10
+      addr = 4'b0001; #10
+      addr = 4'b0010; #10
+      addr = 4'b0011; #10
+      addr = 4'b0100; #10
+      addr = 4'b0101; #10
+      addr = 4'b0110; #10
+      addr = 4'b0111; #10
+      addr = 4'b1000; #10
+
+      // isPlayer1Start is moved 
+      // to after initialization to prevent unwanted state change
+      isPlayer1Start = 1; 
+
       // SHOULD change state to PLAYER1
       if (addr !== 4'b1111) begin
         $display("Error: addr should be 4'b1111 instead of %b",addr);
