@@ -7,22 +7,61 @@
 /////////////////////////////////////////////////////
 
 // states
-typedef enum logic [3:0] {WAIT, CHECKROW0, CHECKROW1, CHECKROW2, WRITE, END} statetype;
+typedef enum logic [2:0] {WAIT, CHECKROW0, CHECKROW1, CHECKROW2} statetype;
 
 // This module checks if the row is full
 module isRowFull(input logic [5:0] gBoardRow,
-                  output logic isFull,
-                  output logic );
+                  output logic isFull);
+  assign isFull = gBoardRow[0] & gBoardRow[2] & gBoardRow[4];
+endmodule
+
+
+
+// This module finds the row given the state
+module extractRow(input logic [17:0] gBoard,
+                  input logic [2:0] state,
+                  output logic [5:0] gBoardRow);
+  always_comb begin
+    case(state)
+      3'b001: gBoardRow<=gBoard[5:0];
+      3'b010: gBoardRow<=gBoard[11:6];
+      3'b011: gBoardRow<=gBoard[17:12];
+
+      default: gBoardRow<=6'b111111;
+    endcase
+  end   
+endmodule
+
+
+
+// This module finds the closest position at which there is a empty space and returns the address
+module closestEmptyPos(input logic [5:0] gBoardRow,
+                       input logic [2:0] state,
+                        output logic [3:0] addr);
+  logic [8:0] combState = {state, gBoardRow};
   
+  always_comb begin
+    casez(combState)
+      9'b001?????0: addr<=4'b0000;
+      9'b001???0?1: addr<=4'b0001;
+      9'b001?0?1?1: addr<=4'b0010;
+
+      9'b010?????0: addr<=4'b0011;
+      9'b010???0?1: addr<=4'b0100;
+      9'b010?0?1?1: addr<=4'b0101;
+
+      9'b011?????0: addr<=4'b0110;
+      9'b011???0?1: addr<=4'b0111;
+      9'b011?0?1?1: addr<=4'b1000;
+      
+      default: addr<=4'b11111; //bad address
+    endcase 
+  end 
 endmodule
 
 module closestPosAI(input  logic          ph1, ph2, reset,
                       input  logic [2:0]  cellState,
-                      input  logic        playerWrite,
-                      input  logic  [3:0] playerInput,  // cell address to play. the cell state is based on the FSM state
                       input  logic [17:0] gBoard,
-                      input  logic        gameIsDone,
-                      input  logic  [1:0] winner,
                       output logic  [3:0] addr);
   statetype state;
 
