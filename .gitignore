@@ -4,6 +4,9 @@ INCA_libs/
 ncverilog.key
 waves.shm
 
+# waveform files generated from testbenches
+*.vcd
+
 # ModelSim generated files
 work/
 
