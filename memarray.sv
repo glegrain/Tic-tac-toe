@@ -48,7 +48,7 @@ module add2mem(input  logic [3:0] addr,
    always_comb
         begin
           case (addr)
-            4'b0000: writePos = 9'b000000001; // upperleft cell
+            4'b0000: writePos = 9'b000000001; // upperleft cell is writePos[0]
             4'b0001: writePos = 9'b000000010;
             4'b0010: writePos = 9'b000000100;
             4'b0011: writePos = 9'b000001000;
@@ -57,6 +57,7 @@ module add2mem(input  logic [3:0] addr,
             4'b0110: writePos = 9'b001000000;
             4'b0111: writePos = 9'b010000000;
             4'b1000: writePos = 9'b100000000;  // lowerleft cell
+            4'b1111: writePos = 9'b000000000; //bad case
             default: writePos = 9'b000000000;  // else, don't write
           endcase
         end

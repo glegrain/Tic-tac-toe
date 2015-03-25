@@ -60,7 +60,7 @@ module statelogic(input  logic     ph1, ph2, reset,
                  else if (playerWrite) nextstate = PLAYER2;
                  else nextstate = PLAYER1;
         PLAYER2: if (gameIsDone) nextstate = END;
-                 else if (~playerWrite) nextstate = PLAYER1;
+                 else if (playerWrite) nextstate = PLAYER1;
                  else nextstate = PLAYER2;
         END:     nextstate = END;
         default: nextstate = START;
@@ -68,6 +68,7 @@ module statelogic(input  logic     ph1, ph2, reset,
     end
 endmodule
 
+///////////////////////////////////////////////////////////////////////
 module outputlogic(input  statetype   state,
                    input  logic       playerWrite,
                    input  logic [3:0] playerInput,

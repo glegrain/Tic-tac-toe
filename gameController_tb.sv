@@ -52,7 +52,7 @@ module gameController_tb();
 
   initial
     begin
-      isPlayer1Start = 1;
+      isPlayer1Start = 0;
       gameIsDone = 0;
       playerWrite = 0;
 
@@ -69,10 +69,11 @@ module gameController_tb();
       addr = 4'b0110; #10
       addr = 4'b0111; #10
       addr = 4'b1000; #10
+      addr = 4'b1111; #10
 
       // isPlayer1Start is moved 
       // to after initialization to prevent unwanted state change
-      isPlayer1Start = 1; 
+      isPlayer1Start = 0; 
 
       // SHOULD change state to PLAYER1
       if (addr !== 4'b1111) begin
@@ -84,10 +85,10 @@ module gameController_tb();
       playerWrite = 1;
       # 10
       // SHOULD change state to PLAYER2
-      playerWrite = 1;
+      playerWrite = 0;
       playerInput = 4'b0100;    // Testbench AI chooses center cell
       # 40
-      playerWrite = 0;
+      playerWrite = 1;
       # 10
       // SHOULD change back to PLAYER1
       playerWrite = 0;
