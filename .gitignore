@@ -7,13 +7,13 @@ waves.shm
 # ModelSim generated files
 work/
 
-# ModelSim project files
+## ModelSim project files
 *.mpf
 
-# ignore ModelSim generated files and directories (temp files and so on)
+## ignore ModelSim generated files and directories (temp files and so on)
 [_@]*
 
-# ignore compilation output of ModelSim
+## ignore compilation output of ModelSim
 *.mti
 *.dat
 *.dbs
@@ -24,7 +24,7 @@ work/
 *.html
 *.bsf
 
-# ignore simulation output of ModelSim
+## ignore simulation output of ModelSim
 wlf*
 *.wlf
 *.vstf
