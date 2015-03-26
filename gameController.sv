@@ -53,10 +53,7 @@ module statelogic(input  logic     ph1, ph2, reset,
   always_comb
     begin
       case (state)
-        START:   if (gBoard == 18'b0) // Wait for gBoard to be initialized
-                  nextstate = (isPlayer1Start) ? PLAYER1 : PLAYER2;
-                 else
-                  nextstate = START;
+        START:   nextstate = (isPlayer1Start) ? PLAYER1 : PLAYER2;
         PLAYER1: if (gameIsDone) nextstate = END;
                  else if (playerWrite) nextstate = PLAYER2;
                  else nextstate = PLAYER1;
