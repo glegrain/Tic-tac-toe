@@ -17,15 +17,14 @@ module top(input  logic        ph1, ph2, reset,
   logic  [1:0] cellState;
   
   gameController gameControllerFSM(.ph1, .ph2, .reset,
-                     			   .isPlayer1Start,
-                     			   .playerWrite,
-                     			   .playerInput,
-                     			   .gBoard,
-                     			   .gameIsDone,
-                     			   .winner,
-                     			   .addr,
-                     			   .outputState,
-                     			   .cellState);
+                                   .isPlayer1Start,
+                                   .playerWrite,
+                                   .playerInput,
+                                   .gameIsDone,
+                                   .winner,
+                                   .addr,
+                                   .outputState,
+                                   .cellState);
 
   memArray gameBoard(.ph1, .ph2, .reset, .addr, .cellState, .gBoard);
 

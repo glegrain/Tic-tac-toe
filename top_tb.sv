@@ -51,7 +51,13 @@ module top_tb();
   // apply test vectors on rising edge of clk
   always @(posedge ph2)
     begin
-      #1; {playerInput, gBoardExpected} = testvectors[vectornum];
+      #1; {playerInput, playerWrite, gBoardExpected} = testvectors[vectornum];
+    end
+
+  // Custom input signals
+  initial
+    begin
+    	isPlayer1Start = 0;
     end
 
   // check results on falling edge of clk
@@ -59,8 +65,13 @@ module top_tb();
     if(~reset) begin // skip during reset
       if (gBoard !== gBoardExpected) begin // check result
         $display("Error: vectornum=%d", vectornum);
-        $display("outputs=%b (%b expected)", gBoard, gBoardExpected);
+        $display("inputs: playerInput=%d playerWrite=%b", playerInput, playerWrite);
+        $display("outputs: gameBoard=%b (%b expected)", gBoard, gBoardExpected);
         errors = errors + 1;
+      end
+      if (gameIsDone) begin
+      	$display("Game is done: player 2'b%b wins",winner);
+      	$finish;
       end
       vectornum = vectornum + 1;
       if(testvectors[vectornum] === 23'bx) begin
