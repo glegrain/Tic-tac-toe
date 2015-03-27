@@ -19,10 +19,9 @@ module gameController(input  logic        ph1, ph2, reset,
                       input  logic        playerWrite,
                       input  logic  [3:0] playerInput,  // cell address to play. the cell state is based on the FSM state
                       input  logic        gameIsDone,
-                      input  logic  [1:0] winner,
-                      output logic  [3:0] addr,
-                      output cellStateType cellState,
-                      output logic  [2:0] outputState);
+                      output logic  [3:0] addr, // outputs the user input, otherwise output 4'b1111
+                      output cellStateType cellState, // outputs the user number 
+                      output logic  [2:0] outputState); //outputs state type
   statetype state;
   assign outputState = state;
   // control FSM

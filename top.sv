@@ -21,10 +21,9 @@ module top(input  logic        ph1, ph2, reset,
                                    .playerWrite,
                                    .playerInput,
                                    .gameIsDone,
-                                   .winner,
                                    .addr,
-                                   .outputState,
-                                   .cellState);
+                                   .cellState,
+                                   .outputState);
 
   memArray gameBoard(.ph1, .ph2, .reset, .addr, .cellState, .gBoard);
 
