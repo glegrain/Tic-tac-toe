@@ -18,17 +18,16 @@ module gameController(input  logic        ph1, ph2, reset,
                       input  logic        isPlayer1Start,
                       input  logic        playerWrite,
                       input  logic  [3:0] playerInput,  // cell address to play. the cell state is based on the FSM state
-                      input  logic [17:0] gBoard,
                       input  logic        gameIsDone,
                       input  logic  [1:0] winner,
                       output logic  [3:0] addr,
-                      output logic  [2:0] outputState,
-                      output cellStateType cellState);
+                      output cellStateType cellState,
+                      output logic  [2:0] outputState);
   statetype state;
   assign outputState = state;
   // control FSM
   statelogic  statelog(.ph1, .ph2, .reset,
-                       .isPlayer1Start, .gameIsDone, .playerWrite, .gBoard, .state);
+                       .isPlayer1Start, .gameIsDone, .playerWrite, .state);
   outputlogic outputlog(.state, .playerWrite, .playerInput, .addr, .cellState);
 
 endmodule
@@ -37,8 +36,7 @@ endmodule
 module statelogic(input  logic     ph1, ph2, reset,
                   input  logic     isPlayer1Start,
                   input  logic     gameIsDone,
-                  input  logic     playerWrite,
-                  input  logic [17:0] gBoard,    
+                  input  logic     playerWrite,  
                   output statetype state);
 
   statetype nextstate;
