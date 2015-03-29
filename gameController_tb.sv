@@ -51,9 +51,9 @@ module gameController_tb();
   // at start of test, load test vectors
   initial
     begin
-      $readmemb("gameBoard.tv", testvectors);
+      $readmemb("gameController.tv", testvectors);
       vectornum=0; errors=0;
-      reset=1; #7; reset=0;
+      reset=1; #17; reset=0;
     end
 
   // apply test vectors on rising edge of clk
