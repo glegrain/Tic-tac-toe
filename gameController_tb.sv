@@ -73,11 +73,11 @@ module gameController_tb();
     if(~reset) begin // skip during reset
       if ((addr !== addrExp) | (cellState !== cellStateExp) | (outputState !== outputStateExp)) begin // check result
         $display("Error: vectornum=%d", vectornum);
-        $display("inputs: reset=%d isPlayer1Start=%b, gameIsDone=%b", reset, isPlayer1Start, gameIsDone;
+        $display("inputs: reset=%d isPlayer1Start=%b, gameIsDone=%b", reset, isPlayer1Start, gameIsDone);
         $display("player inputs: playerInput=%b, playerWrite=%b", playerInput, playerWrite );
         $display("outputs: addr=%b (%b expected)， outputState=%b (%b expected)， cellState=%b (%b expected)", addr, addrExp, outputState, outputStateExp, cellState, cellStateExp);
         errors = errors + 1;
-      endgit statu
+      end
       vectornum = vectornum + 1;
       if(testvectors[vectornum] === 17'bx) begin
         $display("%d tests completed with %d errors", vectornum, errors);
