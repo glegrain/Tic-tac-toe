@@ -8,13 +8,13 @@
 
 // Cell states constants
 // 0 is the human player, X is the AI
-typedef enum logic [1:0] {EMPTY = 2'b00, O = 2'b11, X = 2'b10} cellStateType;
+typedef enum logic [1:0] {EMPTY = 2'b00, WRITE_O = 2'b11, WRITE_X = 2'b10} cellStateType;
 
 // states
 typedef enum logic [2:0] {START, PLAYER1, PLAYER2, END} statetype;
 
 
-module gameController(input  logic        ph1, ph2, reset,
+module gameController(input  logic        ph1, ph2, reset, 
                       input  logic        isPlayer1Start,
                       input  logic        playerWrite,
                       input  logic  [3:0] playerInput,  // cell address to play. the cell state is based on the FSM state
@@ -27,7 +27,7 @@ module gameController(input  logic        ph1, ph2, reset,
   // control FSM
   statelogic  statelog(.ph1, .ph2, .reset,
                        .isPlayer1Start, .gameIsDone, .playerWrite, .state);
-  outputlogic outputlog(.state, .playerWrite, .playerInput, .addr, .cellState);
+  outputlogic outputlog(.state, .reset, .playerWrite, .playerInput, .addr, .cellState);
 
 endmodule
 
@@ -49,15 +49,15 @@ module statelogic(input  logic     ph1, ph2, reset,
   // next state logic
   always_comb
     begin
-      case (state)
+      case (state) // Note: The game controller stays at the same state for one cycle after reset is released?
         START:   nextstate = (isPlayer1Start) ? PLAYER1 : PLAYER2;
-        PLAYER1: if (gameIsDone) nextstate = END;
-                 else if (playerWrite) nextstate = PLAYER2;
-                 else nextstate = PLAYER1;
-        PLAYER2: if (gameIsDone) nextstate = END;
-                 else if (playerWrite) nextstate = PLAYER1;
-                 else nextstate = PLAYER2;
-        END:     nextstate = END;
+        PLAYER1: if (gameIsDone & (~reset)) nextstate = END;
+                 else if (~reset) nextstate = (playerWrite) ? PLAYER2 : PLAYER1;
+                 else nextstate = START;
+        PLAYER2: if (gameIsDone & (~reset)) nextstate = END;
+                 else if (~reset) nextstate = (playerWrite) ? PLAYER1 : PLAYER2;
+                 else nextstate = START;
+        END:     nextstate = (reset) ? START : END;
         default: nextstate = START;
       endcase
     end
@@ -65,6 +65,7 @@ endmodule
 
 ///////////////////////////////////////////////////////////////////////
 module outputlogic(input  statetype   state,
+		   input logic        reset,
                    input  logic       playerWrite,
                    input  logic [3:0] playerInput,
                    output logic [3:0] addr,
@@ -77,11 +78,11 @@ module outputlogic(input  statetype   state,
 
       // always send cellState to memory but will write only
       // on valid addr (addr of 4'b1111 won't write anything)
-      addr = (playerWrite) ? playerInput : 4'b1111;
+      addr = (playerWrite & (~reset)) ? playerInput : 4'b1111;
       if (state == PLAYER1)
-        cellState = O;
+        cellState = WRITE_O;
       else if (state == PLAYER2)
-        cellState = X;
+        cellState = WRITE_X;
       else
         cellState = EMPTY;
     end

@@ -15,9 +15,9 @@ module gameController_tb();
   logic  [3:0]  addr, addrExp;
   logic  [1:0]  cellState, cellStateExp;
   logic  [2:0]  outputState, outputStateExp;
-  //logic [17:0]  gBoardExpected;
   logic [31:0] vectornum, errors;
-  logic [16:0] testvectors[10000:0];  
+  logic [16:0] testvectors[30:0];  
+  logic startTest;
 
 
 
@@ -53,7 +53,8 @@ module gameController_tb();
     begin
       $readmemb("gameBoard.tv", testvectors);
       vectornum=0; errors=0;
-      reset=1; #7; reset=0;
+      startTest=0; reset=1; #27;// reset=0;
+      
     end
 
   // apply test vectors on rising edge of clk
@@ -61,29 +62,24 @@ module gameController_tb();
     begin
       #1; {reset, isPlayer1Start, playerWrite, playerInput, gameIsDone, addrExp, cellStateExp, outputStateExp} = testvectors[vectornum];
     end
-
-  // Custom input signals
-  initial
-    begin
-      isPlayer1Start = 0;
-    end
-
   // check results on falling edge of clk
-  always @(negedge ph2)
-    if(~reset) begin // skip during reset
+  always @(negedge ph2) begin
+    startTest = ((testvectors[vectornum] === 17'bx)) ? 0 : 1;
+    //$display("what's the input? %b, %b", testvectors[vectornum], startTest);
+    if((~reset)|(startTest)) begin // skip during reset
       if ((addr !== addrExp) | (cellState !== cellStateExp) | (outputState !== outputStateExp)) begin // check result
         $display("Error: vectornum=%d", vectornum);
-        $display("inputs: reset=%d isPlayer1Start=%b, gameIsDone=%b", reset, isPlayer1Start, gameIsDone;
+        $display("inputs: reset=%d isPlayer1Start=%b, gameIsDone=%b", reset, isPlayer1Start, gameIsDone);
         $display("player inputs: playerInput=%b, playerWrite=%b", playerInput, playerWrite );
-        $display("outputs: addr=%b (%b expected)， outputState=%b (%b expected)， cellState=%b (%b expected)", addr, addrExp, outputState, outputStateExp, cellState, cellStateExp);
+        $display("outputs: addr=%b (%b expected), outputState=%b (%b expected), cellState=%b (%b expected)", addr, addrExp, outputState, outputStateExp, cellState, cellStateExp);
+        
         errors = errors + 1;
-      endgit statu
+      end
       vectornum = vectornum + 1;
-      if(testvectors[vectornum] === 17'bx) begin
+      if(testvectors[vectornum][0] === 1'bx) begin
         $display("%d tests completed with %d errors", vectornum, errors);
         $finish;
       end
     end
-    
-
+  end
 endmodule
