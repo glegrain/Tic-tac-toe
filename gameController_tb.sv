@@ -53,7 +53,7 @@ module gameController_tb();
     begin
       $readmemb("gameController.tv", testvectors);
       vectornum=0; errors=0;
-      startTest=0; reset=1; #27;// reset=0;
+      startTest=0; 
     end
 
   // apply test vectors on rising edge of clk
