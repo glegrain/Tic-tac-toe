@@ -1,7 +1,7 @@
 // Memory array block for tic-tac-toe project
 // Written by Katherine Yang and Guillaume Legrain
 // Written in: March 23, 2015
-// Last edited: March 25, 2015
+// Last edited: March 27, 2015
 // player1:11, player2:10, tie:01, noWin:00
 // cellState: empty:00, player1:11, player2:10
 /////////////////////////////////////////////////////
@@ -14,7 +14,7 @@ module memArray(input  logic        ph1, ph2, reset,
     logic [17:0] prevGB;
     
     // Write decoder
-    add2mem  decoder(addr[3:0], writePos[8:0]);
+    addr2writePos  decoder(addr[3:0], writePos[8:0]);
 
     // array of Flip-flops
     // NOTE: cellState bit order is flip to have the LSB of the gBoard be the MSB
@@ -43,8 +43,8 @@ module memArray(input  logic        ph1, ph2, reset,
 endmodule
 
 // Write decoder logic
-module add2mem(input  logic [3:0] addr,
-               output logic [8:0] writePos);
+module addr2writePos(input  logic [3:0] addr,
+                     output logic [8:0] writePos);
    always_comb
         begin
           case (addr)
