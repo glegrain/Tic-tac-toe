@@ -63,7 +63,6 @@ module winLogic(input  logic[17:0] gBoard,
     if      (col0IsFull & col0IsSame) winner <= {gBoard[0], gBoard[1]};
     else if (col1IsFull & col1IsSame) winner <= {gBoard[2], gBoard[3]};
     else if (col2IsFull & col2IsSame) winner <= {gBoard[4], gBoard[5]};
-    else if (col0IsFull & col0IsSame) winner <= {gBoard[0], gBoard[1]};
     else if (row0IsFull & row0IsSame) winner <= {gBoard[0], gBoard[1]};
     else if (row1IsFull & row1IsSame) winner <= {gBoard[6], gBoard[7]};
     else if (row2IsFull & row2IsSame) winner <= {gBoard[12], gBoard[13]};
