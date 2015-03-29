@@ -4,6 +4,9 @@
 // states
 //typedef enum logic [2:0] {START, PLAYER1, PLAYER2, END} statetype;
 
+// Set delay unit to 1 ns and simulation precision to 0.1 ns (100 ps)
+`timescale 1ns / 100ps
+
 module gameController_tb();
   logic         ph1, ph2;
   logic         reset;

@@ -1,3 +1,6 @@
+// Set delay unit to 1 ns and simulation precision to 0.1 ns (100 ps)
+`timescale 1ns / 100ps
+
 module winLogic_tb();
   logic clk, reset;
   logic [17:0]gBoard;

@@ -1,3 +1,6 @@
+// Set delay unit to 1 ns and simulation precision to 0.1 ns (100 ps)
+`timescale 1ns / 100ps
+
 module isSame_tb();
   logic clk;
   logic a,b,c;
