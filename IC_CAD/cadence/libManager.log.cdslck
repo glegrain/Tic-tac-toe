@@ -6,11 +6,11 @@
 LockStakeVersion               1.1
 LoginName                      glegrain
 HostName                       tera.eng.hmc.edu
-ProcessIdentifier              63746
-ProcessCreationTime_UTC        1427684703
-ProcessCreationTime_Readable   Sun Mar 29 20:05:03 2015 PDT
+ProcessIdentifier              67574
+ProcessCreationTime_UTC        1427685407
+ProcessCreationTime_Readable   Sun Mar 29 20:16:47 2015 PDT
 AppIdentifier                  /cad/cds/IC615_509/tools/dfII/bin/32bit/libManager
 OSType                         lnx86
 ReasonForPlacingEditLock       log file
 FilePathUsedToEditLock         /hdd/home/glegrain/Tic-tac-toe/IC_CAD/cadence/libManager.log
-TimeEditLocked                 Sun Mar 29 20:05:03 2015 PDT
+TimeEditLocked                 Sun Mar 29 20:16:48 2015 PDT
