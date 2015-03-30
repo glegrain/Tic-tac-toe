@@ -5,7 +5,6 @@ module chip_tb();
   logic  [3:0] playerInput;
   logic [17:0] gBoard;
   logic  [2:0] gameState;
-  logic        gameIsDone;
   logic  [1:0] winner;
 
   logic [17:0] gBoardExpected;
@@ -20,7 +19,6 @@ module chip_tb();
           .playerInput,
           .gBoard,
           .gameState,
-          .gameIsDone,
           .winner);
 
   // generate clock to sequence tests
@@ -69,7 +67,7 @@ module chip_tb();
         $display("outputs: gameBoard=%b (%b expected)", gBoard, gBoardExpected);
         errors = errors + 1;
       end
-      if (gameIsDone) begin
+      if (winner == 2'b00) begin
       	$display("Game is done: player 2'b%b wins",winner);
       	$finish;
       end

@@ -10,11 +10,11 @@ module chip(input  logic        ph1, ph2, reset,
             input  logic  [3:0] playerInput,
             output logic [17:0] gBoard,
             output logic  [2:0] gameState,
-            output logic        gameIsDone,
             output logic  [1:0] winner);
   
   logic  [3:0] addr;
   logic  [1:0] cellState;
+  logic        gameIsDone;
   
   gameController gameControllerFSM(.ph1, .ph2, .reset,
                                    .isPlayer1Start,
