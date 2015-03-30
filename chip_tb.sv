@@ -1,4 +1,4 @@
-module top_tb();
+module chip_tb();
   logic        ph1, ph2, reset;
   logic        isPlayer1Start;
   logic        playerWrite;
@@ -14,7 +14,7 @@ module top_tb();
 
   
   // instantiate device under test
-  top dut(.ph1, .ph2, .reset,
+  chip dut(.ph1, .ph2, .reset,
           .isPlayer1Start,
           .playerWrite,
           .playerInput,
@@ -36,14 +36,14 @@ module top_tb();
   // and start dumping all signal to the .vcd file
   initial
     begin
-      $dumpfile("top.vcd");
+      $dumpfile("chip.vcd");
       $dumpvars;
     end
 
   // at start of test, load test vectors
   initial
     begin
-      $readmemb("top.tv", testvectors);
+      $readmemb("chip.tv", testvectors);
       vectornum=0; errors=0;
       reset=1; #17; reset=0;
     end
