@@ -11,7 +11,7 @@ module memarray_tb();
   logic [23:0] testvectors[10000:0];
 
   // instantiate device under test
-  memArray dut(ph1, ph2, reset, addr, cellState, gBoard);
+  memArray dut(.ph1, .ph2, .reset, .addr, .cellState, .gBoard);
 
   // generate clock to sequence tests
   always
