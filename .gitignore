@@ -41,7 +41,12 @@ vsim.dbg
 # Cadence virtuoso
 ## Lock files preventin another user from opening up the same file
  *.cdslck
+ *.log.cdslck
 
 ## log files
 *.log
 *_run1/*
+
+.cadence
+
+.history
