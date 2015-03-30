@@ -17,9 +17,9 @@ module gameController_tb();
   ///outputs
   logic  [3:0]  addr, addrExp;
   logic  [1:0]  cellState, cellStateExp;
-  logic  [2:0]  gameState, gameStateExp;
+  logic  [1:0]  gameState, gameStateExp;
   logic [31:0] vectornum, errors;
-  logic [16:0] testvectors[30:0];  
+  logic [16:0] testvectors[1000:0];
   logic startTest;
 
 

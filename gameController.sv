@@ -11,7 +11,7 @@
 typedef enum logic [1:0] {EMPTY = 2'b00, WRITE_O = 2'b11, WRITE_X = 2'b10} cellStateType;
 
 // states
-typedef enum logic [2:0] {START, PLAYER1, PLAYER2, END} statetype;
+typedef enum logic [1:0] {START, PLAYER1, PLAYER2, END} statetype;
 
 
 module gameController(input  logic        ph1, ph2, reset, 
@@ -21,7 +21,7 @@ module gameController(input  logic        ph1, ph2, reset,
                       input  logic        gameIsDone,
                       output logic  [3:0] addr, // outputs the user input, otherwise output 4'b1111
                       output cellStateType cellState, // outputs the user number 
-                      output logic  [2:0] gameState); //outputs state type
+                      output statetype gameState); //outputs state type
   statetype state;
   assign gameState = state;
   // control FSM
@@ -39,11 +39,11 @@ module statelogic(input  logic     ph1, ph2, reset,
                   output statetype state);
 
   statetype nextstate;
-  logic [2:0] ns, state_logic;
+  logic [1:0] ns, state_logic;
 
   // resetable state register with initial value of START
-  mux2 #(3) resetmux(nextstate, START, reset, ns);
-  flop #(3) stateregister(ph1, ph2, ns, state_logic);
+  mux2 #(2) resetmux(nextstate, START, reset, ns);
+  flop #(2) stateregister(ph1, ph2, ns, state_logic);
   assign state = statetype'(state_logic);
 
   // next state logic
