@@ -9,7 +9,7 @@ module top(input  logic        ph1, ph2, reset,
            input  logic        playerWrite,
            input  logic  [3:0] playerInput,
            output logic [17:0] gBoard,
-           output logic  [2:0] outputState,
+           output logic  [2:0] gameState,
            output logic        gameIsDone,
            output logic  [1:0] winner);
   
@@ -23,7 +23,7 @@ module top(input  logic        ph1, ph2, reset,
                                    .gameIsDone,
                                    .addr,
                                    .cellState,
-                                   .outputState);
+                                   .gameState);
 
   memArray gameBoard(.ph1, .ph2, .reset, .addr, .cellState, .gBoard);
 

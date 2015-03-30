@@ -4,7 +4,7 @@ module top_tb();
   logic        playerWrite;
   logic  [3:0] playerInput;
   logic [17:0] gBoard;
-  logic  [2:0] outputState;
+  logic  [2:0] gameState;
   logic        gameIsDone;
   logic  [1:0] winner;
 
@@ -19,7 +19,7 @@ module top_tb();
           .playerWrite,
           .playerInput,
           .gBoard,
-          .outputState,
+          .gameState,
           .gameIsDone,
           .winner);
 
