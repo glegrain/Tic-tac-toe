@@ -1,11 +1,13 @@
-module top_tb();
+// Set delay unit to 1 ns and simulation precision to 0.1 ns (100 ps)
+`timescale 1ns / 100ps
+
+module chip_tb();
   logic        ph1, ph2, reset;
   logic        isPlayer1Start;
   logic        playerWrite;
   logic  [3:0] playerInput;
   logic [17:0] gBoard;
-  logic  [2:0] outputState;
-  logic        gameIsDone;
+  logic  [2:0] gameState;
   logic  [1:0] winner;
 
   logic [17:0] gBoardExpected;
@@ -14,13 +16,12 @@ module top_tb();
 
   
   // instantiate device under test
-  top dut(.ph1, .ph2, .reset,
+  chip dut(.ph1, .ph2, .reset,
           .isPlayer1Start,
           .playerWrite,
           .playerInput,
           .gBoard,
-          .outputState,
-          .gameIsDone,
+          .gameState,
           .winner);
 
   // generate clock to sequence tests
@@ -36,14 +37,14 @@ module top_tb();
   // and start dumping all signal to the .vcd file
   initial
     begin
-      $dumpfile("top.vcd");
+      $dumpfile("chip.vcd");
       $dumpvars;
     end
 
   // at start of test, load test vectors
   initial
     begin
-      $readmemb("top.tv", testvectors);
+      $readmemb("chip.tv", testvectors);
       vectornum=0; errors=0;
       reset=1; #17; reset=0;
     end
@@ -69,7 +70,7 @@ module top_tb();
         $display("outputs: gameBoard=%b (%b expected)", gBoard, gBoardExpected);
         errors = errors + 1;
       end
-      if (gameIsDone) begin
+      if (winner == 2'b00) begin
       	$display("Game is done: player 2'b%b wins",winner);
       	$finish;
       end

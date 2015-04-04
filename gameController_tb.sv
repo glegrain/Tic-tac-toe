@@ -17,9 +17,9 @@ module gameController_tb();
   ///outputs
   logic  [3:0]  addr, addrExp;
   logic  [1:0]  cellState, cellStateExp;
-  logic  [2:0]  outputState, outputStateExp;
+  logic  [1:0]  gameState, gameStateExp;
   logic [31:0] vectornum, errors;
-  logic [16:0] testvectors[30:0];  
+  logic [16:0] testvectors[1000:0];
   logic startTest;
 
 
@@ -32,7 +32,7 @@ module gameController_tb();
                      .gameIsDone,
                      .addr,
                      .cellState,
-                     .outputState);
+                     .gameState);
 
   // generate clock to sequence tests
   always
@@ -62,18 +62,18 @@ module gameController_tb();
   // apply test vectors on rising edge of clk
   always @(posedge ph2)
     begin
-      #1; {reset, isPlayer1Start, playerWrite, playerInput, gameIsDone, addrExp, cellStateExp, outputStateExp} = testvectors[vectornum];
+      #1; {reset, isPlayer1Start, playerWrite, playerInput, gameIsDone, addrExp, cellStateExp, gameStateExp} = testvectors[vectornum];
     end
   // check results on falling edge of clk
   always @(negedge ph2) begin
     startTest = ((testvectors[vectornum] === 17'bx)) ? 0 : 1;
     //$display("what's the input? %b, %b", testvectors[vectornum], startTest);
     if((~reset)|(startTest)) begin // skip during reset
-      if ((addr !== addrExp) | (cellState !== cellStateExp) | (outputState !== outputStateExp)) begin // check result
+      if ((addr !== addrExp) | (cellState !== cellStateExp) | (gameState !== gameStateExp)) begin // check result
         $display("Error: vectornum=%d", vectornum);
         $display("inputs: reset=%d isPlayer1Start=%b, gameIsDone=%b", reset, isPlayer1Start, gameIsDone);
         $display("player inputs: playerInput=%b, playerWrite=%b", playerInput, playerWrite );
-        $display("outputs: addr=%b (%b expected), outputState=%b (%b expected), cellState=%b (%b expected)", addr, addrExp, outputState, outputStateExp, cellState, cellStateExp);
+        $display("outputs: addr=%b (%b expected), gameState=%b (%b expected), cellState=%b (%b expected)", addr, addrExp, gameState, gameStateExp, cellState, cellStateExp);
         
         errors = errors + 1;
       end

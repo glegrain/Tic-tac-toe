@@ -4,17 +4,17 @@
 // player1:11, player2:10, tie:01, noWin:00
 // cellState: empty:00, player1:11, player2:10
 /////////////////////////////////////////////////////
-module top(input  logic        ph1, ph2, reset,
-           input  logic        isPlayer1Start,
-           input  logic        playerWrite,
-           input  logic  [3:0] playerInput,
-           output logic [17:0] gBoard,
-           output logic  [2:0] outputState,
-           output logic        gameIsDone,
-           output logic  [1:0] winner);
+module chip(input  logic        ph1, ph2, reset,
+            input  logic        isPlayer1Start,
+            input  logic        playerWrite,
+            input  logic  [3:0] playerInput,
+            output logic [17:0] gBoard,
+            output logic  [2:0] gameState,
+            output logic  [1:0] winner);
   
   logic  [3:0] addr;
   logic  [1:0] cellState;
+  logic        gameIsDone;
   
   gameController gameControllerFSM(.ph1, .ph2, .reset,
                                    .isPlayer1Start,
@@ -23,7 +23,7 @@ module top(input  logic        ph1, ph2, reset,
                                    .gameIsDone,
                                    .addr,
                                    .cellState,
-                                   .outputState);
+                                   .gameState);
 
   memArray gameBoard(.ph1, .ph2, .reset, .addr, .cellState, .gBoard);
 
