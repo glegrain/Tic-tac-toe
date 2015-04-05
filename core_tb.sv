@@ -12,7 +12,7 @@ module core_tb();
 
   logic [17:0] gBoardExpected;
   logic [31:0] vectornum, errors;
-  logic [22:0] testvectors[10000:0]; 
+  logic [23:0] testvectors[10000:0]; 
 
   
   // instantiate device under test
@@ -52,7 +52,7 @@ module core_tb();
   // apply test vectors on rising edge of clk
   always @(posedge ph2_core)
     begin
-      #1; {playerInput_core, playerWrite_core, gBoardExpected} = testvectors[vectornum];
+      #1; {playerInput_core, playerWrite_core, isPlayer1Start_core, gBoardExpected} = testvectors[vectornum];
     end
 
   // Custom input signals
@@ -64,20 +64,20 @@ module core_tb();
   // check results on falling edge of clk
   always @(negedge ph2_core)
     if(~reset_core) begin // skip during reset_core
-      if (gBoard_core !== gBoardExpected) begin // check result
-        $display("Error: vectornum=%d", vectornum);
-        $display("inputs: playerInput_core=%d playerWrite_core=%b", playerInput_core, playerWrite_core);
-        $display("outputs: gameBoard=%b (%b expected)", gBoard_core, gBoardExpected);
-        errors = errors + 1;
-      end
-      if (winner_core == 2'b01) begin
+      if ((winner_core == 2'b01) | (winner_core == 2'b11)| (winner_core == 2'b10)) begin
       	$display("Game is done: player 2'b%b wins",winner_core);
       	$finish;
       end
       vectornum = vectornum + 1;
-      if(testvectors[vectornum] === 23'bx) begin
+      if(testvectors[vectornum] === 24'bx) begin
         $display("%d tests completed with %d errors", vectornum, errors);
         $finish;
+      end
+      if (gBoard_core !== gBoardExpected) begin // check result
+        $display("Error: vectornum=%d", vectornum);
+        $display("inputs: playerInput_core=%b playerWrite_core=%b", playerInput_core, playerWrite_core);
+        $display("outputs: gameBoard=%b (%b expected)", gBoard_core, gBoardExpected);
+        errors = errors + 1;
       end
     end
     
