@@ -7,7 +7,7 @@ module chip_tb();
   logic        playerWrite;
   logic  [3:0] playerInput;
   logic [17:0] gBoard;
-  logic  [2:0] gameState;
+  logic  [1:0] gameState;
   logic  [1:0] winner;
 
   logic [17:0] gBoardExpected;
