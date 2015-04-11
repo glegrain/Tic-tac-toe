@@ -7,12 +7,12 @@ module chip_tb();
   logic        playerWrite;
   logic  [3:0] playerInput;
   logic [17:0] gBoard;
-  logic  [2:0] gameState;
+  logic  [1:0] gameState;
   logic  [1:0] winner;
 
   logic [17:0] gBoardExpected;
   logic [31:0] vectornum, errors;
-  logic [22:0] testvectors[10000:0]; 
+  logic [23:0] testvectors[10000:0]; 
 
   
   // instantiate device under test
@@ -52,7 +52,7 @@ module chip_tb();
   // apply test vectors on rising edge of clk
   always @(posedge ph2)
     begin
-      #1; {playerInput, playerWrite, gBoardExpected} = testvectors[vectornum];
+      #1; {playerInput, playerWrite, isPlayer1Start, gBoardExpected} = testvectors[vectornum];
     end
 
   // Custom input signals
@@ -64,20 +64,20 @@ module chip_tb();
   // check results on falling edge of clk
   always @(negedge ph2)
     if(~reset) begin // skip during reset
+      if ((winner == 2'b01) | (winner == 2'b11)| (winner == 2'b10)) begin
+      	$display("Game is done: player 2'b%b wins",winner);
+      	$finish;
+      end
+      vectornum = vectornum + 1;
+      if(testvectors[vectornum] === 24'bx) begin
+        $display("%d tests completed with %d errors", vectornum, errors);
+        $finish;
+      end
       if (gBoard !== gBoardExpected) begin // check result
         $display("Error: vectornum=%d", vectornum);
         $display("inputs: playerInput=%d playerWrite=%b", playerInput, playerWrite);
         $display("outputs: gameBoard=%b (%b expected)", gBoard, gBoardExpected);
         errors = errors + 1;
-      end
-      if (winner == 2'b00) begin
-      	$display("Game is done: player 2'b%b wins",winner);
-      	$finish;
-      end
-      vectornum = vectornum + 1;
-      if(testvectors[vectornum] === 23'bx) begin
-        $display("%d tests completed with %d errors", vectornum, errors);
-        $finish;
       end
     end
     
