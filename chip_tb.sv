@@ -46,7 +46,7 @@ module chip_tb();
     begin
       $readmemb("chip.tv", testvectors);
       vectornum=0; errors=0;
-      reset=1; #17; reset=0;
+      reset=1; #18; reset=0;
     end
 
   // apply test vectors on rising edge of clk
