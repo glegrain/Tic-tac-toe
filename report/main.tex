@@ -150,6 +150,12 @@ Both the memory array and the win logic were laid out with 8 words of 2-bit leng
 %%%%%%%%%%%%%%%%%%%%%%%%%
 %  Verification
 %%%%%%%%%%%%%%%%%%%%%%%%%
+% • Does layout pass DRC and LVS?\\
+% • Does CIF load correctly and pass DRC and LVS?\\
+% • If the chip contains any analog blocks, show the HSPICE simulations\\
+% • Explain any discrepancies or concerns\\
+% • Postfabrication test plan\\
+% • How will the chip be tested if it is fabricated?
 \section{Verification}
 \label{sec:verification}
 
@@ -157,24 +163,21 @@ All Verilog code successfully simulates using their respective testbenches and s
 
 Every layout component of the system passed DRC and LVS. The exported GDS chip passes DRC with 144 errors related to optional rule 10.4 about spacing from the pad to unrelated metal. 
 
-\subsection{Physical testing after manufacturing}
+%%%%%%%%%%%%%%%%%%%%%%%%%
+%  Postfabrication test plan
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Postfabrication test plan}
 If the chip was to be fabricated, recommended would include:
-\begin{enum}
+\begin{enumerate}
 \item $V_DD$ and $GND$ test by appliying power to the chip.
 \item inspecting the clock ($ph1$ and $ph2$)
 \item connecting switches to inputs and leds to outputs and run parts or all of the test vectors.
-\end{enum}
-
-% • Does layout pass DRC and LVS?\\
-% • Does CIF load correctly and pass DRC and LVS?\\
-% • If the chip contains any analog blocks, show the HSPICE simulations\\
-% • Explain any discrepancies or concerns\\
-% • Postfabrication test plan\\
-% • How will the chip be tested if it is fabricated?
+\end{enumerate}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 %  Summary
 %%%%%%%%%%%%%%%%%%%%%%%%%
+% Summary of design time spent on each component of the project
 \section{Summary}
 \label{sec:summary}
 
@@ -191,7 +194,7 @@ A summary of design time spent on each component of the project is shown in tabl
 \caption{Table of design time for each component}
 \begin{tabular}{ | l | l | l |}
 \hline
-    Component             & Time Spent (hrs) \\
+    Component              & Time Spent (hrs) \\
 \hline
     Project Proposal        & ~7 \\
 \hline
@@ -226,7 +229,7 @@ A summary of design time spent on each component of the project is shown in tabl
 \hline
     Cadence Libraries   & /home/glegrain/IC\_CAD/cadence\\
 \hline
-    PDF of chip plot    &\\ 
+    PDF of chip plot    &  https://github.com/glegrain/Tic-tac-toe/report/chip-layout.png\\ 
 \hline
     Final Report        & \\
 \hline  
@@ -260,8 +263,9 @@ A summary of design time spent on each component of the project is shown in tabl
 \end{thebibliography}
 
 
-%\appendices
-\section{Appendices*}
+%%%%%%%%%%%%%%%%%%%%%%%%%
+% Appendices
+%%%%%%%%%%%%%%%%%%%%%%%%%
 % • Verilog code and testbench (in monospaced font such as Courier 8 pt, with columns lining up and lines wrapping cleanly)\\
 % • Include test vectors unless they are unreasonably long\\
 % • HSPICE testbench(es), if applicable\\
@@ -270,6 +274,7 @@ A summary of design time spent on each component of the project is shown in tabl
 % • Do not include muddlib cells\\
 % • Color layouts (labeled with cell name)\\
 % • Other materials generated during the project 
+\section*{Appendices}
 \appendix
 
 
@@ -344,6 +349,23 @@ The \emph{Game Controller} contains a finite state machine (FSM) to decide when 
 \end{figure}
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%
+%  Code, testbenches and test vectors
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Code, testbenches and test vectors}
+For clarity reasons, only the chip testbench and testvectors are provided here. All other test files can be found in the paths described in sec.~\ref{sec:filelocations}.
+
+\lstinputlisting{../chip_tb.sv}
+\lstinputlisting{../chip.tv}
+\lstinputlisting{../chip.sv}
+\lstinputlisting{../memArray.sv}
+\lstinputlisting{../winLogic.sv}
+\lstinputlisting{../gameController.sv}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+%  Schematics & layout
+%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Schematics \& layouts}
 
 % gameController
