@@ -10,8 +10,6 @@
 \usepackage{multicol}
 \usepackage{wrapfig}
 \usepackage{todonotes}
-\usepackage{syntonly} 
-%\syntaxonly
 
 \title{E158 - VLSI Final Project: Tic-Tac-Toe}
 \author{Katherine Yang and Guillaume Legrain}
@@ -33,15 +31,45 @@
 \section{Introduction}
 \label{sec:introduction}
 % A brief high-level description of the chip function and the manufacturing process
-This project is a 3x3 game of Tic-tac-toe built on a $0.6~\mu m$ process on a $1.5 \times 1.5~mm$ 40-pin MOSIS ``TinyChip''. The goal of this project is to create a Tic-Tac-Toe board which is able to monitor the state of a game and return the win/loose/draw state of the game after each player's move. Specifically, for each player's turn, the game records the player's inputs and at the end of the game determines if the game is done and who the winner is. The game allows two players to play against each other. Each of the nine spaces can be ``X'', ``O'' or blank. 
+This project is a 3x3 game of Tic-tac-toe built on a $0.6~\mu m$ process on a $1.5 \times 1.5~mm$ 40-pin MOSIS ``TinyChip''. The goal of this project was to create a Tic-Tac-Toe board which is able to monitor the state of a game and return the win/loose/draw state of the game after each player's move. Specifically, for each player's turn, the game records the player's inputs and at the end of the game determines if the game is done and who the winner is. The game allows two players to play against each other. Each of the nine spaces can be ``X'', ``O'' or blank. 
+
+% Game representation
+\subsection{Game representation}
+The Tic-tac-toe game board is represented by 8 cells. Each cell is either empty, a cross or a circle using 2-bits as shown in fig.~\ref{fig:cell-representation}. Thus, the game board is represented by an array of 18-bits as shown in fig.~\ref{fig:gBoard-representation}.
+
+\begin{figure}
+\centering
+\includegraphics[width=0.2\textwidth]{cell-representation}
+\caption{Each cell of the game board is represented using two bits. The MSB is used to describe if the cell has been played or not. The LSB is used to describe who played in the cell.}
+\label{fig:cell-representation}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[width=0.2\textwidth]{gBoard-representation}
+\caption{The playable game board is represented by 18-bits. Each pair of bits are used to describe a cell. Each cell holds a two bit value and is accessed with a 4-bit address.}
+\label{fig:gBoard-representation}
+\end{figure}
+
+%  Architecture
+\subsection{Architecture}
+The architecture consists of 3 main modules, one of which was synthesized, and two other were hand laid.
+
+\subsubsection{Memory Array}
+The memory array remembers the status of the tic-tac-toe game board through sequential logic. It consists of enable reset flip-flops and a 4 to 8 bit decoder.
+\subsubsection{Check Win Status}
+The win status module is a combinational logic block that checks the win state of the tic-tac-toe board. There are two custom made leaf cells in this module. This cell is very repetitive and can be organised as a datapath.
+\subsubsection{Game Controller}
+The game controller module is a finite state machine which switches between players, player input and game board. This module will be synthesized as the structure is more irregular and harder to be hand laid.
+
 
 
 \section{Specifications}
 \label{specifications}
 % Table of inputs, outputs indicating name, direction, bus widths
 % Theory of operation of the chip relating the outputs to the inputs
-The chip will have a total of 31 I/O pins plus 5 GND pins and 4 VDD pins.
-User input is a 4-bit vector (\texttt{playerInput<3:0>}) to describe the cell number at which to play. The write input will signal the game controller that the playerInput is ready to read/write. \texttt{gameState<1:0>} is used to represent the state of the game: player 1's turn, player 2's turn or end. As the name implies \texttt{winner<1:0>} describes who won the game: player 1, player 2, tie when the game is not done. To prevent hold time issues, the system will be using two non-overlapping clocks. Thus, the chip uses a two-phase clock with pins \texttt{ph1} and \texttt{ph2}. A list of all inputs can be found in table~\ref{tab:io-list}.
+The chip has a total of 31 I/O pins plus 5 GND pins and 4 VDD pins.
+User input is a 4-bit vector (\texttt{playerInput<3:0>}) to describe the cell number at which to play. The write input signals the game controller that the playerInput is ready to read/write. \texttt{gameState<1:0>} is used to represent the state of the game: player 1's turn, player 2's turn or end. As the name implies \texttt{winner<1:0>} describes who won the game: player 1, player 2, tie when the game is not done. To prevent hold time issues, the system will be using two non-overlapping clocks. Thus, the chip uses a two-phase clock with pins \texttt{ph1} and \texttt{ph2}. A list of all inputs can be found in table~\ref{tab:io-list}.
 
 
 \begin{table}
@@ -84,11 +112,11 @@ User input is a 4-bit vector (\texttt{playerInput<3:0>}) to describe the cell nu
 % • Compare the actual floorplan to the proposal and explain discrepancies\\
 % • Slice plan for datapath(s)\\
 % • Pinout diagram indicating names and pin numbers for each pin
-Figure~\ref{fig:floorplan} shows the chip floorplan for  the tic-tac-toe chip including the pad frame. The top-level blocks are the \emph{game controller}, the \emph{datapath} and the \emph{memory}. A wiring channel is located between the controllers and datapath and between the datapah and memory to provide room to route control signals to the datapath. The \emph{pad frame} includes 40 I/O pads, which are wired to the pins on the chip package. As listed in table~\ref{tab:io-list}, there are 31 pads used for signal; the remainder are $V_{DD}$ and GND. Figure ~\ref{fig.pinout} shows the pinout diagram indicating names and pin numbers for each pin.
+Figure~\ref{fig:floorplan} shows the chip floorplan for the tic-tac-toe chip including the pad frame. The top-level blocks are the \emph{game controller}, the \emph{datapath} and the \emph{memory}. A wiring channel is located between the controllers and datapath and between the datapah and memory to provide room to route control signals to the datapath. The \emph{pad frame} includes 40 I/O pads, which are wired to the pins on the chip package. As listed in table~\ref{tab:io-list}, there are 31 pads used for signal; the remainder are $V_{DD}$ and GND. Figure ~\ref{fig:pinout} shows the pinout diagram indicating names and pin numbers for each pin.
 
 \begin{figure}
 \centering
-\includegraphics[width=.9\textwidth]{pinout}
+\includegraphics[width=.8\textwidth]{pinout}
 \caption{Tic-tac-toe pinout diagram}
 \label{fig:pinout}
 \end{figure}
@@ -100,26 +128,20 @@ on a side. Each pad is $750 \lambda \times 350 \lambda$
 
 \begin{figure}
 \centering
-\includegraphics[width=.9\textwidth]{chipsize}
+\includegraphics[width=.6\textwidth]{chipsize}
 \caption{Tic-tac-toe floorplan}
 \label{fig:floorplan}
 \end{figure}
 
-\subsection{Top Level Blocks}
-\subsection{Synthesized Blocks}
-\begin{itemize}
-\item Game controller FSM
-\item ``AI'' FSM
-\end{itemize}
+\subsection{Slice Plans}
+Both the memory array and the win logic were laid out with 8 words of 2-bit length. A slice plan for the datapath is shown in fig.~\ref{fig:sliceplan}.
 
-\subsection{Custom Blocks}
-\begin{itemize}
-\item Memory array with decoder logic
- \item datapath: win logic
- \end{itemize}
-
-\section{Slice Plans}
-Both the memory array and the win logic will be laid out with 8 words of 2-bit length.
+\begin{figure}
+\centering
+\includegraphics[width=0.9\textwidth]{sliceplan.pdf}
+\caption{Slice plan for the datapath includes both the \emph{memArray} and the \emph{winLogic}}
+\label{fig:sliceplan}
+\end{figure}
 
 % \clearpage
 % \onecolumn
@@ -135,14 +157,20 @@ All Verilog code successfully simulates using their respective testbenches and s
 
 Every layout component of the system passed DRC and LVS. The exported GDS chip passes DRC with 144 errors related to optional rule 10.4 about spacing from the pad to unrelated metal. 
 
-If the chip was to be fabricated
+\subsection{Physical testing after manufacturing}
+If the chip was to be fabricated, recommended would include:
+\begin{enum}
+\item $V_DD$ and $GND$ test by appliying power to the chip.
+\item inspecting the clock ($ph1$ and $ph2$)
+\item connecting switches to inputs and leds to outputs and run parts or all of the test vectors.
+\end{enum}
 
-• Does layout pass DRC and LVS?\\
-• Does CIF load correctly and pass DRC and LVS?\\
-• If the chip contains any analog blocks, show the HSPICE simulations\\
-• Explain any discrepancies or concerns\\
-• Postfabrication test plan\\
-• How will the chip be tested if it is fabricated?
+% • Does layout pass DRC and LVS?\\
+% • Does CIF load correctly and pass DRC and LVS?\\
+% • If the chip contains any analog blocks, show the HSPICE simulations\\
+% • Explain any discrepancies or concerns\\
+% • Postfabrication test plan\\
+% • How will the chip be tested if it is fabricated?
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 %  Summary
@@ -206,55 +234,43 @@ A summary of design time spent on each component of the project is shown in tabl
 
 \label{tab:filelocations}
 \end{table}
-\section{References}
-\section{Appendices}
-• Verilog code and testbench (in monospaced font such as Courier 8 pt, with columns lining up and lines wrapping cleanly)\\
-• Include test vectors unless they are unreasonably long\\
-• HSPICE testbench(es), if applicable\\
-• Legible schematics of the cells you produced (labeled with cell name)\\
-• Do not include large synthesized blocks that are unintelligible\\
-• Do not include muddlib cells\\
-• Color layouts (labeled with cell name)\\
-• Other materials generated during the project 
 
 
 
 
 
 
+\begin{thebibliography}{widest entry}
+\bibitem{e85-book}
+  David Harris \& Sarah Harris,
+  \emph{Digital Design and Computer Architecture},
+  Morgan Kaufmann; 2nd edition,
+  2012.
+\bibitem{flip-flop-paper}
+ Crowley, Kevin \& Siegler, Robert S.
+  \emph{Flexible Strategy Use in Young Children's Tic-Tac-Toe},
+  Cognitive Science; Issue 4, Volume 2,
+  1993.
+ \bibitem{checkersReport}
+ Max Korbel \& Ian Jimenez
+  \emph{Simplified Checkers},
+  E158: Introduction to CMOS VLSI Design Lab Report,
+  2011. 
+
+\end{thebibliography}
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%
-%  Architecture
-%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Architecture}
-The architecture consists of 3 main modules, one of which will be synthesized, and two will be hand laid.
-
-\subsection{List of modules}
-\subsubsection{Memory Array}
-The memory array remembers the status of the tic-tac-toe game board through sequential logic. It consists of enable reset flip-flops and a 4 to 8 bit decoder.
-\subsubsection{Check Win Status}
-The win status module is a combinational logic block that checks the win state of the tic-tac-toe board. There are two custom made leaf cells in this module. This cell is very repetitive and can be organised as a datapath.
-\subsubsection{Game Controller}
-The game controller module is a finite state machine which switches between players, player input and game board. This module will be synthesized as the structure is more irregular and harder to be hand laid.
-
-\subsection{Game representation}
-The Tic-tac-toe game board is represented by 8 cells. Each cell is either empty, a cross or a circle using 2-bits as shown in fig.~\ref{fig:cell-representation}. Thus, the game board is represented by an array of 18-bits as shown in fig.~\ref{fig:gBoard-representation}.
-
-\begin{figure}
-\centering
-\includegraphics[width=0.2\textwidth]{cell-representation}
-\caption{Each cell of the game board is represented using two bits. The MSB is used to describe if the cell has been played or not. The LSB is used to describe who played in the cell.}
-\label{fig:cell-representation}
-\end{figure}
-
-\begin{figure}
-\centering
-\includegraphics[width=0.2\textwidth]{gBoard-representation}
-\caption{The playable game board is represented by 18-bits. Each pair of bits are used to describe a cell. Each cell holds a two bit value and is accessed with a 4-bit address.}
-\label{fig:gBoard-representation}
-\end{figure}
-
+%\appendices
+\section{Appendices*}
+% • Verilog code and testbench (in monospaced font such as Courier 8 pt, with columns lining up and lines wrapping cleanly)\\
+% • Include test vectors unless they are unreasonably long\\
+% • HSPICE testbench(es), if applicable\\
+% • Legible schematics of the cells you produced (labeled with cell name)\\
+% • Do not include large synthesized blocks that are unintelligible\\
+% • Do not include muddlib cells\\
+% • Color layouts (labeled with cell name)\\
+% • Other materials generated during the project 
+\appendix
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
@@ -328,30 +344,6 @@ The \emph{Game Controller} contains a finite state machine (FSM) to decide when 
 \end{figure}
 
 
-
-
-\begin{thebibliography}{widest entry}
-\bibitem{e85-book}
-  David Harris \& Sarah Harris,
-  \emph{Digital Design and Computer Architecture},
-  Morgan Kaufmann; 2nd edition,
-  2012.
-\bibitem{flip-flop-paper}
- Crowley, Kevin \& Siegler, Robert S.
-  \emph{Flexible Strategy Use in Young Children's Tic-Tac-Toe},
-  Cognitive Science; Issue 4, Volume 2,
-  1993.
- \bibitem{checkersReport}
- Max Korbel \& Ian Jimenez
-  \emph{Simplified Checkers},
-  E158: Introduction to CMOS VLSI Design Lab Report,
-  2011. 
-
-\end{thebibliography}
-
-
-%\appendices
-\appendix
 \section{Schematics \& layouts}
 
 % gameController
