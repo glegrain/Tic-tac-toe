@@ -40,41 +40,38 @@ This project is a 3x3 game of Tic-tac-toe built on a $0.6~\mu m$ process on a $1
 \label{specifications}
 % Table of inputs, outputs indicating name, direction, bus widths
 % Theory of operation of the chip relating the outputs to the inputs
-The chip will have a total of 32 I/O pins plus 4 GND pins and 4 VDD pins.
+The chip will have a total of 31 I/O pins plus 5 GND pins and 4 VDD pins.
 User input is a 4-bit vector (\texttt{playerInput<3:0>}) to describe the cell number at which to play. The write input will signal the game controller that the playerInput is ready to read/write. \texttt{gameState<1:0>} is used to represent the state of the game: player 1's turn, player 2's turn or end. As the name implies \texttt{winner<1:0>} describes who won the game: player 1, player 2, tie when the game is not done. To prevent hold time issues, the system will be using two non-overlapping clocks. Thus, the chip uses a two-phase clock with pins \texttt{ph1} and \texttt{ph2}. A list of all inputs can be found in table~\ref{tab:io-list}.
 
 
 \begin{table}
 \centering
-\caption{List of I/O pins for a total of 32 pins}
+\caption{List of I/O pins for a total of 40 pins}
 \begin{tabular}{ | l | l | l | p{5cm} |}
 \hline
-    Function (\emph{Name})               & I/O type     & Bus Width & Description \\
+    Function (\emph{Name})                  & I/O type     & Bus Width & Description \\
 \hline
-    Power (\emph {vdd})                  & Input/Output & 1         & Provides power \\
+    Power (\emph {vdd})                     & Input/Output & 1 (x4)    & Provides power \\
 \hline
-    Ground (\emph{gnd})                  & Input/Output & 1         & Ground \\
+    Ground (\emph{gnd})                     & Input/Output & 1 (x5)    & Ground \\
 \hline
-    Reset (\emph{reset})                 & Input        & 1         & Resets the board to empty \\
+    Reset (\emph{reset})                    & Input        & 1         & Resets the board to empty \\
 \hline 
-    Clock (\emph{ph1, ph2})              & Input        & 2         & Two phase clock\\
+    Clock (\emph{ph1, ph2})                 & Input        & 2         & Two phase clock\\
 \hline
-    First Player (\emph{isPlayer1Start}) & Input        & 1         & Determines which player plays "X" or "O" \\
+    First Player (\emph{isPlayer1Start})    & Input        & 1         & Determines which player plays "X" or "O" \\
 \hline
-    Write Confirmation (\emph{playerWrite}) & Input     & 1         & Confirms the current player input \\
+    Write Confirmation (\emph{playerWrite}) & Input        & 1         & Confirms the current player input \\
 \hline
-    Input Position (\emph{playerInput})    & Input      & 4         & Indicates which position on the game board the player played \\
+    Input Position (\emph{playerInput})     & Input        & 4         & Indicates which position on the game board the player played \\
 \hline
-    Game Complete (\emph{gameIsDone})      & Output     & 1         & Determines if game is complete \\
+    Winner (\emph{winner})                  & Output       & 2         & Displays \texttt{11} if player 1 wins, \texttt{10} if player 2 wins, and \texttt{01} if there is a draw \\
 \hline
-    Winner (\emph{winner}) & Output & 2 & Displays \texttt{11} if player 1 wins, \texttt{10} if player 2 wins, and \texttt{01} if there is a draw \\
+    Game State (\emph{gameState})           & Output       & 2         & Indicates which player's turn it is to play or if the game is done\\
 \hline
-    Game State (\emph{gameState}) & Output              & 3         & Indicates which player's turn it is to play or if the game is done\\
-\hline
-    Game Board (\emph{gBoard})              & Output     & 18        & Displays the current state of the game \\
+    Game Board (\emph{gBoard})              & Output       & 18        & Displays the current state of the game \\
     \hline
 \end{tabular}
-
 \label{tab:io-list}
 \end{table}
 
@@ -87,11 +84,11 @@ User input is a 4-bit vector (\texttt{playerInput<3:0>}) to describe the cell nu
 % • Compare the actual floorplan to the proposal and explain discrepancies\\
 % • Slice plan for datapath(s)\\
 % • Pinout diagram indicating names and pin numbers for each pin
-Figure~\ref{fig:floorplan} shows the chip floorplan for  the tic-tac-toe chip including the pad frame. The top-level blocks are the game controller, the datapath and the memory. A wiring channel is located between the controllers and datapath and between the datapah and memory to provide room to route control signals to the datapath. The \emph{pad frame} includes 40 I/O pads, which are wired to the pins on the chip package. As listed in table~\ref{tab:io-list}, there are 32 pads used for signal; the remainder are $V_{DD}$ and GND. Figure ~\ref{fig.pinout} shows the pinout diagram indicating names and pin numbers for each pin.
+Figure~\ref{fig:floorplan} shows the chip floorplan for  the tic-tac-toe chip including the pad frame. The top-level blocks are the \emph{game controller}, the \emph{datapath} and the \emph{memory}. A wiring channel is located between the controllers and datapath and between the datapah and memory to provide room to route control signals to the datapath. The \emph{pad frame} includes 40 I/O pads, which are wired to the pins on the chip package. As listed in table~\ref{tab:io-list}, there are 31 pads used for signal; the remainder are $V_{DD}$ and GND. Figure ~\ref{fig.pinout} shows the pinout diagram indicating names and pin numbers for each pin.
 
 \begin{figure}
 \centering
-\includegraphics[width=.2\textwidth]{pinout}
+\includegraphics[width=.9\textwidth]{pinout}
 \caption{Tic-tac-toe pinout diagram}
 \label{fig:pinout}
 \end{figure}
@@ -103,7 +100,7 @@ on a side. Each pad is $750 \lambda \times 350 \lambda$
 
 \begin{figure}
 \centering
-\includegraphics[width=.2\textwidth]{chipsize}
+\includegraphics[width=.9\textwidth]{chipsize}
 \caption{Tic-tac-toe floorplan}
 \label{fig:floorplan}
 \end{figure}
