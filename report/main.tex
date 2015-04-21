@@ -11,11 +11,22 @@
 \usepackage{wrapfig}
 \usepackage{listings}
 \usepackage{todonotes}
+\usepackage{color}
+\usepackage{hyperref}
+
+
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
 
 \lstset{ %
 breaklines=true,
 title=\lstname,
-language=Verilog
+language=Verilog,
+commentstyle=\color{mygreen},
+keywordstyle=\color{blue},
+showspaces=false,
+frame=single
 }
 
 \title{E158 - VLSI Final Project: Tic-Tac-Toe}
@@ -44,14 +55,14 @@ This project is a 3x3 game of Tic-tac-toe built on a $0.6~\mu m$ process on a $1
 \subsection{Game representation}
 The Tic-tac-toe game board is represented by 8 cells. Each cell is either empty, a cross or a circle using 2-bits as shown in fig.~\ref{fig:cell-representation}. Thus, the game board is represented by an array of 18-bits as shown in fig.~\ref{fig:gBoard-representation}.
 
-\begin{figure}
+\begin{figure}[b]
 \centering
 \includegraphics[width=0.2\textwidth]{cell-representation}
 \caption{Each cell of the game board is represented using two bits. The MSB is used to describe if the cell has been played or not. The LSB is used to describe who played in the cell.}
 \label{fig:cell-representation}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[ht]
 \centering
 \includegraphics[width=0.2\textwidth]{gBoard-representation}
 \caption{The playable game board is represented by 18-bits. Each pair of bits are used to describe a cell. Each cell holds a two bit value and is accessed with a 4-bit address.}
@@ -194,9 +205,9 @@ If the chip was to be fabricated, recommended would include:
 %%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Design Time}
 \label{sec:designtime}
-A summary of design time spent on each component of the project is shown in table ~\ref{tab:designtime}
+A summary of design time spent on each component of the project is shown in table ~\ref{tab:designtime}.
 
-\begin{table}
+\begin{table}[H]
 \centering
 \caption{Table of design time for each component}
 \begin{tabular}{ | l | l | l |}
@@ -218,17 +229,18 @@ A summary of design time spent on each component of the project is shown in tabl
 \label{tab:designtime}
 \end{table}
 \subsection{File Locations}
+Location of the files for this project are listed in table~\ref{tab:filelocations}. Some of theses files can also be found in the appendices.
 \label{sec:filelocations}
-\begin{table}
+\begin{table}[H]
 \centering
 \caption{File locations for each component}
 \begin{tabular}{ |p{3cm} | l |}
 \hline
     Item                & Location \\
 \hline
-    Verilog testbench   & https://github.com/glegrain/Tic-tac-toe\\
+    Verilog testbench   & \url{https://github.com/glegrain/Tic-tac-toe}\\
 \hline
-    Testvectors         & https://github.com/glegrain/Tic-tac-toe\\
+    Testvectors         & \url{https://github.com/glegrain/Tic-tac-toe}\\
 \hline
     Synthesis Results   & /home/glegrain/IC\_CAD/cadence/texttt{*.rep, *pow}\\
 \hline
@@ -236,9 +248,9 @@ A summary of design time spent on each component of the project is shown in tabl
 \hline
     Cadence Libraries   & /home/glegrain/IC\_CAD/cadence\\
 \hline
-    PDF of chip plot    &  https://github.com/glegrain/Tic-tac-toe/report/chip-layout.png\\ 
+    PDF of chip plot    &  \url{https://github.com/glegrain/Tic-tac-toe/report/chip-layout.png}\\ 
 \hline
-    Final Report        & \\
+    Final Report        & \url{https://github.com/glegrain/Tic-tac-toe/blob/master/report/main.pdf} \\
 \hline  
 \end{tabular}
 
@@ -270,6 +282,7 @@ A summary of design time spent on each component of the project is shown in tabl
 \end{thebibliography}
 
 
+\clearpage
 %%%%%%%%%%%%%%%%%%%%%%%%%
 % Appendices
 %%%%%%%%%%%%%%%%%%%%%%%%%
@@ -291,7 +304,7 @@ A summary of design time spent on each component of the project is shown in tabl
 \section{Logic Design}
 A top level diagram in fig.~\ref{fig:top-level} show the different blocks of the architecture.
 
-\begin{figure}
+\begin{figure}[b]
 \centering
 \includegraphics[width=0.8\textwidth]{top-level}
 \caption{Top Level Block Diagram of the Tic-tac-toe architecture.}
@@ -302,7 +315,7 @@ The blocks are described in each of the sections below. The game controller is i
 \subsection{Memory Array}
 The \emph{Memory array} is an array of 18-bit flip-flops (9 words of 2-bits) to store the state of the game board. The memory array incorporates a row decoder using the address (\texttt{addr[3:0]} to activate one of the rows by asserting the wordline (\texttt{cellState[1:0]}). The decoder logic for the memory can be seen in figure~\ref{fig:memArray}.
 
-The decoder logic will be using an estimate of 4 cells per ``write'' to enable each pairs of flip-flop. Thus, the decoder logic will be using an estimate of $4\times 9$ logic gates which rounds to a rough size estimate of  $ 1000\lambda \times 188 \lambda$. The flip-flop array height estimate is $18 \times 100\lambda = 1800\lambda$ and the width is $300\lambda$ wide . The total size estimate for the memory block rounded up to $2000 \lambda \times 600 \lambda$.
+The decoder was estimated to use 4 cells per ``write'' to enable each pairs of flip-flop. Thus, the decoder logic was estimated to be using an estimate of $4\times 9$ logic gates which rounds to a rough size estimate of  $ 1000\lambda \times 188 \lambda$. The flip-flop array height estimate was $18 \times 100\lambda = 1800\lambda$ and the width to $300\lambda$ wide . The total size estimate for the memory block was rounded up to $2000 \lambda \times 600 \lambda$. The actual size ended up being $1250 \lambda \times 1210\lambda$.
 \begin{figure}
 \centering
 \includegraphics[width=.45\textwidth]{memArray}
