@@ -62,3 +62,4 @@ vsim.dbg
 *.mtc1
 *.out
 *.synctex.gz
+*converted-to.pdf
