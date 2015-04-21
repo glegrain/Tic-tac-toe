@@ -12,6 +12,12 @@
 \usepackage{listings}
 \usepackage{todonotes}
 
+\lstset{ %
+breaklines=true,
+title=\lstname,
+language=Verilog
+}
+
 \title{E158 - VLSI Final Project: Tic-Tac-Toe}
 \author{Katherine Yang and Guillaume Legrain}
 \date{April 2015}
@@ -359,7 +365,7 @@ For clarity reasons, only the chip testbench and testvectors are provided here. 
 \lstinputlisting{../chip_tb.sv}
 \lstinputlisting{../chip.tv}
 \lstinputlisting{../chip.sv}
-\lstinputlisting{../memArray.sv}
+\lstinputlisting{../memarray.sv}
 \lstinputlisting{../winLogic.sv}
 \lstinputlisting{../gameController.sv}
 
